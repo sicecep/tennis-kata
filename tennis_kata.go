@@ -78,10 +78,11 @@ func (g TennisGame) printScore() string {
 }
 
 func main() {
+	fmt.Println("== Set player name ==")
 	players := make([]string, 2)
 	scanner := bufio.NewScanner(os.Stdin)
 	for i := 1; i < 3; i++ {
-		fmt.Printf("Enter player %d name: \n", i)
+		fmt.Printf("Enter player %d name: ", i)
 		scanner.Scan()
 		players[i-1] = scanner.Text()
 	}
@@ -93,14 +94,14 @@ func main() {
 	fmt.Println("== Start game ==")
 	score := g.GetScore()
 	for strings.HasPrefix(score, "Win for") == false {
-		fmt.Printf("Add point to player (1/2/quit): ")
+		fmt.Printf("Add point to player (1/2/q): ")
 		scanner.Scan()
 		switch scanner.Text() {
 		case "1":
 			g.AddPoint(player1)
 		case "2":
 			g.AddPoint(player2)
-		case "quit":
+		case "q":
 			fmt.Println("== Exit game ==")
 			os.Exit(1)
 		default:
