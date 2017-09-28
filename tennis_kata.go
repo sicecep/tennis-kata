@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 type Player struct {
@@ -75,11 +78,37 @@ func (g TennisGame) printScore() string {
 }
 
 func main() {
-	var player1 = &Player{"Sepry", 0}
-	var player2 = &Player{"Haryandi", 0}
+	players := make([]string, 2)
+	scanner := bufio.NewScanner(os.Stdin)
+	for i := 1; i < 3; i++ {
+		fmt.Printf("Enter player %d name: \n", i)
+		scanner.Scan()
+		players[i-1] = scanner.Text()
+	}
+
+	var player1 = &Player{players[0], 0}
+	var player2 = &Player{players[1], 0}
 	var g = TennisGame{player1, player2}
 
-	g.AddPoint(player1)
-	fmt.Println(g.printScore())
-	fmt.Println(g.GetScore())
+	fmt.Println("== Start game ==")
+	score := g.GetScore()
+	for strings.HasPrefix(score, "Win for") == false {
+		fmt.Printf("Add point to player (1/2/quit): ")
+		scanner.Scan()
+		switch scanner.Text() {
+		case "1":
+			g.AddPoint(player1)
+		case "2":
+			g.AddPoint(player2)
+		case "quit":
+			fmt.Println("== Exit game ==")
+			os.Exit(1)
+		default:
+			fmt.Println("wrong input")
+		}
+		score = g.GetScore()
+		fmt.Println(g.printScore())
+		fmt.Println(score)
+	}
+	fmt.Println("== End game ==")
 }
